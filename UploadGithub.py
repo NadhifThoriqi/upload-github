@@ -1,13 +1,11 @@
 from tkinter import simpledialog
 import subprocess, json, os, time, tkinter as tk
 
-global window
-window = tk.Tk()
-
 config_file = "github_config.json"
 
 def add_config(project_path: str, isi):
-    # window.withdraw()
+    window = tk.Tk()
+    window.withdraw()
     repo_url = simpledialog.askstring("Konfigurasi Baru", 
             "Masukkan URL repository GitHub (contoh: https://github.com/username/repo.git):", 
             parent=None)
