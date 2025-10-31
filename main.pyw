@@ -49,10 +49,10 @@ def log_main(frame):
     scrollbar.pack(side="right", fill="y")
     log_text.config(yscrollcommand=scrollbar.set)
 
-def log_output(message):
+def log_output(message, *messages: str | list[str] | tuple[str, ...]):
     """Menambahkan pesan ke area log dan menggulir ke bawah."""
     log_text.config(state='normal')
-    log_text.insert(tk.END, message + "\n")
+    log_text.insert(tk.END, message + "\n", messages)
     log_text.see(tk.END) # Scroll ke bawah
     log_text.config(state='disabled')
     Window.update_idletasks() # Memaksa update GUI
