@@ -63,7 +63,7 @@ def upload_to_github(project_path: str, commit_message: str, output):
     branch = config["branch"]
 
     # 3️⃣ Pastikan ada git repo
-    if not os.path.exists(os.path.join(project_path, ".git")):
+    if not os.path.exists(os.path.join(project_path)):
         log_output("⚙️  Menginisialisasi repository Git baru...")
         run_command("git init", cwd=project_path)
         run_command(f"git remote add origin {repo_url}", cwd=project_path)
