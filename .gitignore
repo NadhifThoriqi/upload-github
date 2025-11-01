@@ -1,4 +1,4 @@
-apps/__pycache__/
+*
+*__pycache__/
 test/
 tests/
-apps/resources/github_config.json
