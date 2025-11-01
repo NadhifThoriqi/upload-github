@@ -13,27 +13,30 @@ def add_config(project_path: str, isi):
     if not repo_url:
         return None
     
+    dafault_branch = run_command("git branch", get_output=True)
+
     branch = simpledialog.askstring("Konfigurasi Baru", 
-            "Masukkan nama branch (default: main):", 
+            f"Masukkan nama branch (default: {dafault_branch}):", 
             initialvalue="main", 
-            parent=None) or "main"
+            parent=None) or dafault_branch
     
     config = {"repo_url": repo_url, "branch": branch}
     isi.update({project_path: config})
     with open(config_file, "w") as f:
         json.dump(isi, f, indent=4)
     return config
+    
+def cek_config():
+    with open(config_file, 'r') as x:
+        return json.load(x)
 
 def load_config(project_path:str):
-    # if os.path.exists(config_file):
-    with open(config_file, 'r') as x:
-        file = json.load(x)
-    for x in file.keys():
-        if project_path == x:
-            return {"repo_url": file[x]["repo_url"], "branch": file[x]["branch"]}
-        else: return add_config(project_path, file)
+    file = cek_config()
+    if project_path in file:
+        return {"repo_url": file[project_path]["repo_url"], "branch": file[project_path]["branch"]}
+    else: return add_config(project_path, file)
 
-def run_command(command, cwd=None, output: str|bytes|None=None):
+def run_command(command, cwd=None, output: str|bytes|None=None, get_output: bool|None=False):
     """Jalankan perintah terminal dan tampilkan output-nya"""
     output(f"\n👉 Menjalankan: {command}")
     result = subprocess.run(command, shell=True, text=True, capture_output=True, cwd=cwd)
@@ -41,7 +44,7 @@ def run_command(command, cwd=None, output: str|bytes|None=None):
         output("❌ Terjadi kesalahan:\n", result.stderr)
     else:
         output(result.stdout)
-
+    if get_output: return result.stdout 
 
 def upload_to_github(project_path: str, commit_message: str, output: bytes):
     output("=== 🚀 Program Upload ke GitHub ===\n")
