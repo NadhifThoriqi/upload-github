@@ -12,13 +12,11 @@ def add_config(project_path: str, isi):
     
     if not repo_url:
         return None
-    
-    dafault_branch = run_command("git branch", get_output=True)
 
     branch = simpledialog.askstring("Konfigurasi Baru", 
-            f"Masukkan nama branch (default: {dafault_branch}):", 
+            "Masukkan nama branch (default: {'main'}):", 
             initialvalue="main", 
-            parent=None) or dafault_branch
+            parent=None) or "main"
     
     config = {"repo_url": repo_url, "branch": branch}
     isi.update({project_path: config})
