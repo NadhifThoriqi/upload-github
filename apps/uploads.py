@@ -1,7 +1,9 @@
 from tkinter import simpledialog
 import subprocess, json, os, time, tkinter as tk
 
-config_file = "assets/github_config.json"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+FILE_NAME="github_config.json"
+config_file = os.path.join(BASE_DIR, "resources", FILE_NAME)
 
 def add_config(project_path: str, isi):
     window = tk.Tk()
@@ -25,8 +27,10 @@ def add_config(project_path: str, isi):
     return config
     
 def cek_config():
-    with open(config_file, 'r') as x:
-        return json.load(x)
+    if os.path.getsize(config_file) > 0:
+        with open(config_file, 'r') as x:
+            return json.load(x)
+    else: return
 
 def load_config(project_path:str):
     file = cek_config()
