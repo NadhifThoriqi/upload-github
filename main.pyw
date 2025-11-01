@@ -1,5 +1,5 @@
 from tkinter import ttk, messagebox, filedialog
-from UploadGithub import upload_to_github, load_config
+from UploadGithub import *
 import tkinter as tk
 
 # init 
@@ -34,7 +34,6 @@ def input_main(frame):
     
     # Konfigurasi grid
     path_frame.grid_columnconfigure(1, weight=1)
-
 
 def log_main(frame): 
     """Untuk menampilkan log proses"""

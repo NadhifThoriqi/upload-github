@@ -36,26 +36,25 @@ def load_config(project_path:str):
 
 def run_command(command, cwd=None):
     """Jalankan perintah terminal dan tampilkan output-nya"""
-    log_output(f"\n👉 Menjalankan: {command}")
+    globals()["log_output"](f"\n👉 Menjalankan: {command}")
     result = subprocess.run(command, shell=True, text=True, capture_output=True, cwd=cwd)
     if result.returncode != 0:
-        log_output("❌ Terjadi kesalahan:\n", result.stderr)
+        globals()["log_output"]("❌ Terjadi kesalahan:\n", result.stderr)
     else:
-        log_output(result.stdout)
+        globals()["log_output"](result.stdout)
 
 
 def upload_to_github(project_path: str, commit_message: str, output):
-    global log_output
-    log_output = output
-    log_output("=== 🚀 Program Upload ke GitHub ===\n")
+    globals()["log_output"] = output
+    globals()["log_output"]("=== 🚀 Program Upload ke GitHub ===\n")
     
     # 1️⃣ Minta lokasi folder proyek
     if not os.path.exists(project_path):
-        log_output("❌ Folder tidak ditemukan. Pastikan path sudah benar!")
+        globals()["log_output"]("❌ Folder tidak ditemukan. Pastikan path sudah benar!")
         return
 
     # 2️⃣ Pindahkan ke folder proyek
-    log_output(f"📂 Mengakses folder: {project_path}")
+    globals()["log_output"](f"📂 Mengakses folder: {project_path}")
     time.sleep(1)
 
     config = load_config(project_path)
@@ -64,18 +63,18 @@ def upload_to_github(project_path: str, commit_message: str, output):
 
     # 3️⃣ Pastikan ada git repo
     if not os.path.exists(os.path.join(project_path)):
-        log_output("⚙️  Menginisialisasi repository Git baru...")
+        globals()["log_output"]("⚙️  Menginisialisasi repository Git baru...")
         run_command("git init", cwd=project_path)
         run_command(f"git remote add origin {repo_url}", cwd=project_path)
 
     # 4️⃣ Tambahkan semua file, commit, dan push
-    log_output("\n📦 Menambahkan file ke Git...")
+    globals()["log_output"]("\n📦 Menambahkan file ke Git...")
     run_command("git add .", cwd=project_path)
 
-    log_output("\n📝 Melakukan commit...")
+    globals()["log_output"]("\n📝 Melakukan commit...")
     run_command(f'git commit -m "{commit_message}"', cwd=project_path)
 
-    log_output(f"\n🌐 Mengunggah ke GitHub branch '{branch}'...")
+    globals()["log_output"](f"\n🌐 Mengunggah ke GitHub branch '{branch}'...")
     run_command(f"git push -u origin {branch}", cwd=project_path)
 
-    log_output("\n✅ Selesai! Program telah diunggah ke GitHub.")
+    globals()["log_output"]("\n✅ Selesai! Program telah diunggah ke GitHub.")
