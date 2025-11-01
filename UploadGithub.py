@@ -1,7 +1,7 @@
 from tkinter import simpledialog
 import subprocess, json, os, time, tkinter as tk
 
-config_file = "github_config.json"
+config_file = "assets/github_config.json"
 
 def add_config(project_path: str, isi):
     window = tk.Tk()
@@ -31,30 +31,28 @@ def load_config(project_path:str):
     for x in file.keys():
         if project_path == x:
             return {"repo_url": file[x]["repo_url"], "branch": file[x]["branch"]}
-        # else: add_config(project_path)
         else: return add_config(project_path, file)
 
-def run_command(command, cwd=None):
+def run_command(command, cwd=None, output: str|bytes|None=None):
     """Jalankan perintah terminal dan tampilkan output-nya"""
-    globals()["log_output"](f"\n👉 Menjalankan: {command}")
+    output(f"\n👉 Menjalankan: {command}")
     result = subprocess.run(command, shell=True, text=True, capture_output=True, cwd=cwd)
     if result.returncode != 0:
-        globals()["log_output"]("❌ Terjadi kesalahan:\n", result.stderr)
+        output("❌ Terjadi kesalahan:\n", result.stderr)
     else:
-        globals()["log_output"](result.stdout)
+        output(result.stdout)
 
 
-def upload_to_github(project_path: str, commit_message: str, output):
-    globals()["log_output"] = output
-    globals()["log_output"]("=== 🚀 Program Upload ke GitHub ===\n")
+def upload_to_github(project_path: str, commit_message: str, output: bytes):
+    output("=== 🚀 Program Upload ke GitHub ===\n")
     
     # 1️⃣ Minta lokasi folder proyek
     if not os.path.exists(project_path):
-        globals()["log_output"]("❌ Folder tidak ditemukan. Pastikan path sudah benar!")
+        output("❌ Folder tidak ditemukan. Pastikan path sudah benar!")
         return
 
     # 2️⃣ Pindahkan ke folder proyek
-    globals()["log_output"](f"📂 Mengakses folder: {project_path}")
+    output(f"📂 Mengakses folder: {project_path}")
     time.sleep(1)
 
     config = load_config(project_path)
@@ -63,18 +61,18 @@ def upload_to_github(project_path: str, commit_message: str, output):
 
     # 3️⃣ Pastikan ada git repo
     if not os.path.exists(os.path.join(project_path)):
-        globals()["log_output"]("⚙️  Menginisialisasi repository Git baru...")
-        run_command("git init", cwd=project_path)
-        run_command(f"git remote add origin {repo_url}", cwd=project_path)
+        output("⚙️  Menginisialisasi repository Git baru...")
+        run_command("git init", cwd=project_path, output=output)
+        run_command(f"git remote add origin {repo_url}", cwd=project_path, output=output)
 
     # 4️⃣ Tambahkan semua file, commit, dan push
-    globals()["log_output"]("\n📦 Menambahkan file ke Git...")
-    run_command("git add .", cwd=project_path)
+    output("\n📦 Menambahkan file ke Git...")
+    run_command("git add .", cwd=project_path, output=output)
 
-    globals()["log_output"]("\n📝 Melakukan commit...")
-    run_command(f'git commit -m "{commit_message}"', cwd=project_path)
+    output("\n📝 Melakukan commit...")
+    run_command(f'git commit -m "{commit_message}"', cwd=project_path, output=output)
 
-    globals()["log_output"](f"\n🌐 Mengunggah ke GitHub branch '{branch}'...")
-    run_command(f"git push -u origin {branch}", cwd=project_path)
+    output(f"\n🌐 Mengunggah ke GitHub branch '{branch}'...")
+    run_command(f"git push -u origin {branch}", cwd=project_path, output=output)
 
-    globals()["log_output"]("\n✅ Selesai! Program telah diunggah ke GitHub.")
+    output("\n✅ Selesai! Program telah diunggah ke GitHub.")

@@ -1,3 +1,4 @@
 # created by virtualenv automatically
 inter.pyw
 __pycache__/
+tests/

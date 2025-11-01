@@ -5,7 +5,7 @@ import tkinter as tk
 # init 
 Window = tk.Tk()
 Window.title("🚀 Upload Otomatis ke GitHub")
-Window.iconbitmap(bitmap="logo.ico")
+Window.iconbitmap(bitmap="assets/logo.ico")
 Window.geometry("400x500")
 # Window.configure(bg="black")
 
