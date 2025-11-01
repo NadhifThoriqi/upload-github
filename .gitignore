@@ -1,0 +1,4 @@
+apps/__pycache__/
+test/
+tests/
+apps/resources/github_config.json
