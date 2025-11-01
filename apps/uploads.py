@@ -45,7 +45,7 @@ def run_command(command, cwd=None, output: str|bytes|None=None):
     else:
         output(result.stdout)
 
-def upload_to_github(project_path: str, commit_message: str, output: bytes):
+def upload_to_github(project_path: str, commit_message: str, output: bytes) -> bool:
     output("=== 🚀 Program Upload ke GitHub ===\n")
     
     # 1️⃣ Minta lokasi folder proyek
@@ -78,3 +78,4 @@ def upload_to_github(project_path: str, commit_message: str, output: bytes):
     run_command(f"git push -u origin {branch}", cwd=project_path, output=output)
 
     output("\n✅ Selesai! Program telah diunggah ke GitHub.")
+    return True
